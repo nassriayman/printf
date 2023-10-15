@@ -13,7 +13,7 @@
 
 #define NULL_STRING "(null)"
 
-#define PARMS_INITIALISATION {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+#define PARAMS_INIT {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 
 #define CONVERT_LOWERCASE	1
 #define CONVERT_UNSIGNED	2
@@ -31,7 +31,7 @@
  * @h_modifier: on if h_modifier is specified
  * @l_modifier: on if l_modifier is specified
  */
-typedef struct inputs
+typedef struct parameters
 {
 	unsigned int unsign			: 1;
 
@@ -46,7 +46,7 @@ typedef struct inputs
 
 	unsigned int h_modifier		: 1;
 	unsigned int l_modifier		: 1;
-} inputs_t;
+} params_t;
 
 /**
  * struct specifier - Struct token
@@ -56,53 +56,48 @@ typedef struct inputs
 typedef struct specifier
 {
 	char *specifier;
-	int (*f)(va_list, inputs_t *);
+	int (*f)(va_list, params_t *);
 } specifier_t;
 
-int _putstr(char *str);
-int _putchar(int ch);
+int _puts(char *str);
+int _putchar(int c);
 
-int print_chr(va_list ptarg, inputs_t *prm);
+int print_char(va_list ap, params_t *params);
+int print_int(va_list ap, params_t *params);
+int print_string(va_list ap, params_t *params);
+int print_percent(va_list ap, params_t *params);
+int print_S(va_list ap, params_t *params);
 
-int print_string(va_list ptarg, inputs_t *prm);
-int print_percent(va_list ptarg, inputs_t *prm);
+char *convert(long int num, int base, int flags, params_t *params);
+int print_unsigned(va_list ap, params_t *params);
+int print_address(va_list ap, params_t *params);
 
+int (*get_specifier(char *s))(va_list ap, params_t *params);
+int get_print_func(char *s, va_list ap, params_t *params);
+int get_flag(char *s, params_t *params);
+int get_modifier(char *s, params_t *params);
+char *get_width(char *s, params_t *params, va_list ap);
 
+int print_hex(va_list ap, params_t *params);
+int print_HEX(va_list ap, params_t *params);
+int print_binary(va_list ap, params_t *params);
+int print_octal(va_list ap, params_t *params);
 
-int get_modifier(char *sum, inputs_t *prm);
-int print_unsigned(va_list ptarg, inputs_t *prm);
-int print_add(va_list ptarg, inputs_t *prm);
+int print_from_to(char *start, char *stop, char *except);
+int print_rev(va_list ap, params_t *params);
+int print_rot13(va_list ap, params_t *params);
 
-int (*get_specifier(char *sum))(va_list ptarg, inputs_t *prm);
+int _isdigit(int c);
+int _strlen(char *s);
+int print_number(char *str, params_t *params);
+int print_number_right_shift(char *str, params_t *params);
+int print_number_left_shift(char *str, params_t *params);
 
+void init_params(params_t *params, va_list ap);
 
-char *cvt(long int num, int base, int flags, inputs_t *prm);
-char *get_width(char *sum, inputs_t *prm, va_list ptarg);
+char *get_precision(char *p, params_t *params, va_list ap);
 
-int print_hex(va_list ptarg, inputs_t *prm);
-int print_HEX(va_list ptarg, inputs_t *prm);
-int print_binary(va_list ptarg, inputs_t *prm);
-int print_octal(va_list ptarg, inputs_t *prm);
-int print_int(va_list ptarg, inputs_t *prm);
-int print_S(va_list ptarg, inputs_t *prm);
-
-int get_print_funct(char *sum, va_list ptarg, inputs_t *prm);
-int get_flag(char *sum, inputs_t *prm);
-int print_range_to(char *start, char *stop, char *except);
-int print_rv(va_list ptarg, inputs_t *prm);
-int print_rotat13(va_list ptarg, inputs_t *prm);
-
-int _isletter(int ch);
-int _strlenght(char *sum);
-int pt_num(char *str, inputs_t *prm);
-int print_number_right_shift(char *str, inputs_t *prm);
-int print_number_left_shift(char *str, inputs_t *prm);
-
-void init_prm(inputs_t *prm, va_list ptarg);
-
-char *get_precision(char *p, inputs_t *prm, va_list ptarg);
-
-int _printf(const char *fmt, ...);
+int _printf(const char *format, ...);
 
 
 
